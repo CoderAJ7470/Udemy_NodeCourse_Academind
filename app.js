@@ -11,7 +11,7 @@ const http = require('http');
 
 // Or like so:
 const server = http.createServer((req, res) => {
-  console.log(req);
+  console.log(req.url, req.method, req.headers);
 
   // To stop the server's event loop, we can call process.exit(),
   // but usually, this is not the way we stop the server
