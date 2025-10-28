@@ -1,5 +1,6 @@
 // Importing the http module from Node, and assigning it to a constant, from which we can access any of the module's methods
 const http = require('http');
+const fs = require('fs');
 
 //function requestListener(req, res) {}
 
@@ -22,15 +23,37 @@ const server = http.createServer((req, res) => {
   // console.log(req.url, req.method, req.headers);
 
   const url = req.url;
+  const method = req.method;
 
   if (url === '/') {
     res.write('<html>');
     res.write('<head><title>Enter a message</title></head>');
     res.write(
-      "<body><form action='/message' method='POST'><input type='text' name='message'><button type='submit'>Send</button></form></body>"
+      "<body><form action='/message' method='POST'><input id='message' type='text' name='message'><button type='submit'>Send</button></form></body>"
     );
     res.write('</html>');
     return res.end(); // this has to be called so that Node knows we are done creating the response
+  }
+
+  if (url === '/message' && method === 'POST') {
+    const reqBody = [];
+
+    req.on('data', (chunk) => {
+      console.log('got ', chunk);
+      reqBody.push(chunk);
+    });
+
+    // Executes when the incoming request parsing has been completed
+    req.on('end', () => {
+      // here is where we do the buffering; "Buffer" is a globally-available object
+      const parsedBody = Buffer.concat(reqBody).toString();
+      const userInput = parsedBody.split('=')[1];
+      fs.writeFileSync('message.txt', userInput);
+    });
+
+    res.statusCode = 302; // 302 = redirect
+    res.setHeader('Location', '/');
+    return res.end();
   }
 
   // Here, we are sending back our own response
