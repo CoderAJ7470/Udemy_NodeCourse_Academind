@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
       "<body><form action='/message' method='POST'><input type='text' name='message'><button type='submit'>Send</button></form></body>"
     );
     res.write('</html>');
-    res.end(); // this has to be called so that Node knows we are done creating the response
+    return res.end(); // this has to be called so that Node knows we are done creating the response
   }
 
   // Here, we are sending back our own response
