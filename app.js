@@ -44,16 +44,24 @@ const server = http.createServer((req, res) => {
     });
 
     // Executes when the incoming request parsing has been completed
-    req.on('end', () => {
+    // The first "return" keyword is important, because otherwise, Node will just register
+    // these event listeners and simply execute the lines that follow after the end of
+    // this function
+    return req.on('end', () => {
       // here is where we do the buffering; "Buffer" is a globally-available object
       const parsedBody = Buffer.concat(reqBody).toString();
       const userInput = parsedBody.split('=')[1];
-      fs.writeFileSync('message.txt', userInput);
-    });
 
-    res.statusCode = 302; // 302 = redirect
-    res.setHeader('Location', '/');
-    return res.end();
+      fs.writeFile('message.txt', userInput, (error) => {
+        if (error) {
+          return console.log('Error: ', error);
+        }
+
+        res.statusCode = 302; // 302 = redirect
+        res.setHeader('Location', '/');
+        return res.end();
+      });
+    });
   }
 
   // Here, we are sending back our own response
