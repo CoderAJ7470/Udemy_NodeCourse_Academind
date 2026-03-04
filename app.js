@@ -2,6 +2,8 @@
 const http = require('http');
 const fs = require('fs');
 
+const port = 3000;
+
 //function requestListener(req, res) {}
 
 // createServer takes a requestListener
@@ -29,7 +31,7 @@ const server = http.createServer((req, res) => {
     res.write('<html>');
     res.write('<head><title>Enter a message</title></head>');
     res.write(
-      "<body><form action='/message' method='POST'><input id='message' type='text' name='message'><button type='submit'>Send</button></form></body>"
+      "<body><form action='/message' method='POST'><input id='message' type='text' name='message'><button type='submit'>Send</button></form></body>",
     );
     res.write('</html>');
     return res.end(); // this has to be called so that Node knows we are done creating the response
@@ -67,6 +69,7 @@ const server = http.createServer((req, res) => {
   // Here, we are sending back our own response
   // Sending back some html, which has to typed
   // line-by-line, in this weird manner
+  // This response will be sent from the server only if the url has a /message in it
   res.setHeader('Content-Type', 'text/html');
   res.write('<html>');
   res.write('<head><title>My First Page from Node.js</title></head>');
@@ -76,4 +79,4 @@ const server = http.createServer((req, res) => {
 });
 
 // listens for incoming requests on the given port, in this case, 8080
-server.listen(8080);
+server.listen(port, () => console.log(`Server running on port ${port}...`));
