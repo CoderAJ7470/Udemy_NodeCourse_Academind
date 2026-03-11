@@ -60,5 +60,11 @@ const requestHandler = (req, res) => {
   res.end(); // this has to be called so that Node knows we are done creating the response
 };
 
-// One way of exporting a function in Node.js; modue.exports is a global object exported by Node, and so it can work with this. With this, we can "import" this function in the app.js file with the "require" keyword, since requestHandler is being registered here in this fashion
+// Option 1: One way of exporting a function in Node.js; modue.exports is a global object exported by Node, and so it can work with this. With this, we can "import" this function in the app.js file with the "require" keyword, since requestHandler is being registered here in this fashion
 module.exports = requestHandler;
+
+// Option 2: Another way of exporting a function (and more than that) from this module - in an object
+module.exports = {
+  handler: requestHandler,
+  someText: 'yo sup?',
+};

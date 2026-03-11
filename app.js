@@ -22,7 +22,9 @@ const port = 3000;
 //   // process.exit()
 // });
 
-const server = http.createServer(routes);
+const server = http.createServer(routes); // with option 1 from routes.js
 
-// listens for incoming requests on the given port, in this case, 8080
+// const server = http.createServer(routes.handler) // with option 2 from routes.js
+
+// listens for incoming requests on the given port, in this case, 3000
 server.listen(port, () => console.log(`Server running on port ${port}...`));
